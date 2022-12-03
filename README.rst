@@ -1,4 +1,4 @@
-Yet another rPPG
+More rPPG algorithms
 ================
 
 *\* This is a work in progress, do not blindly trust the results \**
@@ -33,7 +33,7 @@ can run the yarppg subfolder as a python package using the ``-m`` flag:
 
 .. code:: bash
 
-   git clone https://github.com/SamProell/yarppg.git
+   git clone https://github.com/zhao-bob/mrppg.git
    cd yarppg
    pip install -r requirements.txt
    python -m yarppg  # from yarppg top-level directory
