@@ -1,7 +1,11 @@
-mediapipe
-numpy
+mediapipe~=0.9.1.0
+numpy~=1.23.5
 opencv_python
-pandas
-PyQt5
-pyqtgraph
-scipy
+pandas~=1.5.3
+PyQt5~=5.15.9
+pyqtgraph~=0.13.1
+scipy~=1.10.0
+
+matplotlib~=3.7.1
+opencv-python~=4.7.0.72
+setuptools~=65.6.3
