@@ -5,6 +5,7 @@ import time
 import cv2
 import numpy as np
 import mediapipe as mp
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
@@ -21,11 +22,13 @@ def exponential_smooth(new_roi, old_roi, factor):
     smooth_roi = np.multiply(new_roi, 1 - factor) + np.multiply(old_roi, factor)
     return tuple(smooth_roi.astype(int))
 
+
 def get_boundingbox_from_landmarks(lms):
     xy = np.min(lms, axis=0)
     wh = np.subtract(np.max(lms, axis=0), xy)
 
     return np.r_[xy, wh]
+
 
 class ROIDetector:
     def __init__(self, smooth_factor=0.0, **kwargs):
@@ -45,6 +48,7 @@ class ROIDetector:
 
     def __call__(self, frame):
         return self.get_roi(frame)
+
 
 class NoDetector(ROIDetector):
     def __init__(self, **kwargs):
@@ -109,10 +113,10 @@ class HaarCascadeDetector(ROIDetector):
         faces = self.cascade.detectMultiScale(gray,
                                               scaleFactor=self.scale_factor,
                                               minNeighbors=self.min_neighbors,
-                                              )# minSize=self.min_size)
+                                              )  # minSize=self.min_size)
         if len(faces) > 0:
             x, y, w, h = faces[0]
-            return RegionOfInterest.from_rectangle(frame, (x, y), (x+w, y+h))
+            return RegionOfInterest.from_rectangle(frame, (x, y), (x + w, y + h))
 
         return RegionOfInterest(frame, mask=None)
 
@@ -136,6 +140,7 @@ def get_facemesh_coords(landmark_list, frame):
 
     return np.multiply(xys, [w, h]).astype(int)
 
+
 class FaceMeshDetector(ROIDetector):
     _lower_face = [200, 431, 411, 340, 349, 120, 111, 187, 211]
 
@@ -147,7 +152,7 @@ class FaceMeshDetector(ROIDetector):
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5
         )
-        self.draw_landmarks=draw_landmarks
+        self.draw_landmarks = draw_landmarks
 
     def __del__(self):
         self.face_mesh.close()
@@ -186,7 +191,7 @@ class FaceMeshDetector(ROIDetector):
                     connections=mp_face_mesh.FACEMESH_TESSELATION,
                     landmark_drawing_spec=None,
                     connection_drawing_spec=mp_drawing_styles
-                    .get_default_face_mesh_tesselation_style())
+                        .get_default_face_mesh_tesselation_style())
             if contour:
                 mp.solutions.drawing_utils.draw_landmarks(
                     image=img,
@@ -194,7 +199,7 @@ class FaceMeshDetector(ROIDetector):
                     connections=mp.solutions.face_mesh.FACEMESH_CONTOURS,
                     landmark_drawing_spec=None,
                     connection_drawing_spec=mp.solutions.drawing_styles
-                    .get_default_face_mesh_contours_style())
+                        .get_default_face_mesh_contours_style())
             if irises and len(face_landmarks) > 468:
                 mp.solutions.drawing_utils.draw_landmarks(
                     image=img,
@@ -202,4 +207,4 @@ class FaceMeshDetector(ROIDetector):
                     connections=mp_face_mesh.FACEMESH_IRISES,
                     landmark_drawing_spec=None,
                     connection_drawing_spec=mp_drawing_styles
-                    .get_default_face_mesh_iris_connections_style())
+                        .get_default_face_mesh_iris_connections_style())

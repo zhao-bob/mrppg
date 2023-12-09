@@ -78,7 +78,7 @@ class Solution:
                             left += 1
                             break
                 right += 1
-        return res
+            return res
 
     def check(self, countMap, n):
         res = True
@@ -89,7 +89,6 @@ class Solution:
 
 
 if __name__ == "__main__":
-    #
-    s = "RQWQWQWE"
+    s = "WWEQERQWQWWRWWERQWEQ"
     test = Solution().balancedString(s)
     print(test)
